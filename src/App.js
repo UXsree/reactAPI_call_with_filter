@@ -25,21 +25,40 @@ class App extends Component {
       return item.title.toLowerCase().search(
         e.target.value.toLowerCase()) !== -1;
     });
-    this.setState({dupdata: updatedList});  
+    this.setState({dupdata: updatedList});
     
   }
   render() {
-    //console.log("data from render", this.state.data);
-    //let { data } = this.state.data;
     if(this.state.data != null){
+              const { data, dupdata, currentPage, todosPerPage } = this.state;
+              const indexOfLastTodo = currentPage * todosPerPage;
+        const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
+        const currentTodos = data.slice(indexOfFirstTodo, indexOfLastTodo);
+        // Logic for displaying page numbers
+        const pageNumbers = [];
+        for (let i = 1; i <= Math.ceil(data.length / todosPerPage); i++) {
+          pageNumbers.push(i);
+        }
+
+        const renderPageNumbers = pageNumbers.map(number => {
+          return (
+            <li
+              key={number}
+              id={number}
+              //onClick={this.handleClick}
+            >
+              {number}
+            </li>
+          );
+        });
       //console.log("data from render",this.state.data[0]);
       return (
         <div className="App">
           filter data <input onChange={this.changeHandler} id="filter" type="text"/>
           <CustTable data={this.state.dupdata} />
-          {/*<ul id="page-numbers">
+            <ul id="page-numbers">
               {renderPageNumbers}
-            </ul>*/}
+            </ul>
         </div>
     );
     }else{
@@ -69,7 +88,7 @@ class CustTable extends Component{
   }
    render(){
      var dataList = this.props.data.map((d)=>{
-        return (<tr>
+        return (<tr key={d.id}>
         <td>{d.id}</td>
         <td>{d.userId}</td>
         <td>{d.title}</td>
@@ -88,13 +107,6 @@ class CustTable extends Component{
             </thead>
             <tbody>{dataList}</tbody>
           </table>
-      /*<ul>
-      {
-        this.props.items.map(function(item) {
-          return <li key={item}>{item}</li>
-        })
-       }
-      </ul>*/
     )  
   }
 }

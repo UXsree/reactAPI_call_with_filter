@@ -26,3 +26,12 @@
   from { transform: rotate(0deg); }
   to { transform: rotate(360deg); }
 }
+#page-numbers{
+  list-style-type:none;
+  color: #0000ff;
+}
+#page-numbers li{
+  display:inline;
+  margin:0px 15px;
+  cursor: pointer;
+}
