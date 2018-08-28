@@ -28,15 +28,33 @@ class App extends Component {
     this.setState({dupdata: updatedList});
     
   }
+  handlePageClick = (e) => {
+        this.setState({
+          currentPage: Number(e.target.id)
+        });
+  }
+
   render() {
     if(this.state.data != null){
-              const { data, dupdata, currentPage, todosPerPage } = this.state;
-              const indexOfLastTodo = currentPage * todosPerPage;
+        const { data, dupdata, currentPage, todosPerPage } = this.state;
+        const indexOfLastTodo = currentPage * todosPerPage;
         const indexOfFirstTodo = indexOfLastTodo - todosPerPage;
-        const currentTodos = data.slice(indexOfFirstTodo, indexOfLastTodo);
+        let pageData;
+        console.log(indexOfFirstTodo, indexOfLastTodo);
+        console.log("data: ",data);
+        console.log("currentTodos: ",currentTodos);
+        console.log("dupdata: ",dupdata);
+        if(dupdata.length != 0){
+          var currentTodos = dupdata;
+          pageData = dupdata.length;
+        }else{
+          currentTodos = data.slice(indexOfFirstTodo, indexOfLastTodo);
+          pageData = data.length;
+        }
+        
         // Logic for displaying page numbers
         const pageNumbers = [];
-        for (let i = 1; i <= Math.ceil(data.length / todosPerPage); i++) {
+        for (let i = 1; i <= Math.ceil(pageData / todosPerPage); i++) {
           pageNumbers.push(i);
         }
 
@@ -45,7 +63,7 @@ class App extends Component {
             <li
               key={number}
               id={number}
-              //onClick={this.handleClick}
+              onClick={this.handlePageClick}
             >
               {number}
             </li>
@@ -55,7 +73,7 @@ class App extends Component {
       return (
         <div className="App">
           filter data <input onChange={this.changeHandler} id="filter" type="text"/>
-          <CustTable data={this.state.dupdata} />
+          <CustTable data={currentTodos} />
             <ul id="page-numbers">
               {renderPageNumbers}
             </ul>
@@ -76,7 +94,7 @@ class App extends Component {
       .then(response => response.json())
       .then((data) => {
         this.setState({ data:data });
-        this.setState({ dupdata:data });
+        //this.setState({ dupdata:data });
         // this.renderLoadedView();
       });
   }
