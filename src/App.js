@@ -25,7 +25,7 @@ class App extends Component {
       return item.title.toLowerCase().search(
         e.target.value.toLowerCase()) !== -1;
     });
-    this.setState({dupdata: updatedList});
+    this.setState({dupdata: updatedList, currentPage:1});
     
   }
   handlePageClick = (e) => {
@@ -45,7 +45,8 @@ class App extends Component {
         console.log("currentTodos: ",currentTodos);
         console.log("dupdata: ",dupdata);
         if(dupdata.length != 0){
-          var currentTodos = dupdata;
+          //this.setState({currentPage:1});
+          var currentTodos = dupdata.slice(indexOfFirstTodo, indexOfLastTodo);
           pageData = dupdata.length;
         }else{
           currentTodos = data.slice(indexOfFirstTodo, indexOfLastTodo);
